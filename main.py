@@ -1,5 +1,6 @@
 from tkinter import *
 
+from numpy.ma.core import count
 from pandas.core.window import Window
 from pandas.io.sas.sas_constants import column_label_length_length
 
@@ -17,18 +18,25 @@ LONG_BREAK_MIN = 20
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+def count_down(count):
+    canvas.itemconfig(timer_text, text=count)
+    if count> 0:
+        window.after(1000,count_down,count-1)
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Pomodoro")
 window.config(padx=100,pady=50, bg= YELLOW)
+
 canvas = Canvas(width=200, height=224, bg= YELLOW, highlightthickness=0)
 tomato_img = PhotoImage(file="tomato.png")
 canvas.create_image(100,112,image=tomato_img)
-canvas.create_text(100,130, text= "00:00", fill="white", font=(FONT_NAME,34, "bold"))
+timer_text = canvas.create_text(100,130, text= "00:00", fill="white", font=(FONT_NAME,34, "bold"))
 label = Label( text= "Timer", font=(FONT_NAME,34, "bold"), fg=GREEN, bg= YELLOW)
 label_check = Label( text= "✔", font=(FONT_NAME,24, "bold"), fg=GREEN, bg= YELLOW)
+count_down(5)
 button_start = Button(text="Start", highlightthickness=0)
 button_start.grid(column=0,row=3)
 button_reset = Button(text="Reset", highlightthickness=0)
